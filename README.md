@@ -4,7 +4,27 @@ An API to ensure mixin included logic (the "plugin") only runs once.
 
 ## Usage
 
-TODO: Write code samples and usage instructions here
+```ruby
+requre 'much-plugin'
+
+module MyPluginMixin
+  include MuchPlugin
+
+  plugin_included do
+
+    # ... do some stuff ...
+    # - will be class eval'd in the scope of the receiver of `MyPluginMixin`
+    # - will only be executed once per receiver, no matter how many times
+    #   `MyPluginMixin` is included in that receiver
+
+  end
+
+end
+```
+
+Mix `MuchPlugin` in on other mixins that act as "plugins" to other components.  Define included hooks using `plugin_included` that will be class eval'd in the scope of the receiver.
+
+This allows you to define multiple hooks separately and ensures each hook will only be executed once - even if your plugin is mixed in multiple times on the same receiver.
 
 ## Installation
 
