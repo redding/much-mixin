@@ -6,11 +6,11 @@ require "much-plugin/version"
 Gem::Specification.new do |gem|
   gem.name        = "much-plugin"
   gem.version     = MuchPlugin::VERSION
-  gem.authors     = ["TODO: authors"]
-  gem.email       = ["TODO: emails"]
-  gem.description = %q{TODO: Write a gem description}
-  gem.summary     = %q{TODO: Write a gem summary}
-  gem.homepage    = "http://github.com/__/much-plugin"
+  gem.authors     = ["Kelly Redding", "Collin Redding"]
+  gem.email       = ["kelly@kellyredding.com", "collin.redding@me.com"]
+  gem.description = %q{An API to ensure mixin included logic (the "plugin") only runs once.}
+  gem.summary     = %q{An API to ensure mixin included logic (the "plugin") only runs once.}
+  gem.homepage    = "http://github.com/redding/much-plugin"
   gem.license     = 'MIT'
 
   gem.files         = `git ls-files`.split($/)
@@ -18,7 +18,6 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_development_dependency("assert", ["~> 2.12"])
-  # TODO: gem.add_dependency("gem-name", ["~> 0.0"])
+  gem.add_development_dependency("assert", ["~> 2.15"])
 
 end

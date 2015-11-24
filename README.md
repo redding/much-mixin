@@ -1,6 +1,6 @@
 # MuchPlugin
 
-TODO: Write a gem description
+An API to ensure mixin included logic (the "plugin") only runs once.
 
 ## Usage
 
