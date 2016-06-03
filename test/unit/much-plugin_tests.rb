@@ -13,15 +13,19 @@ module MuchPlugin
     end
     subject{ @plugin }
 
-    should have_imeths :much_plugin_included_hooks, :much_plugin_receivers
+    should have_imeths :much_plugin_included_detector, :much_plugin_included_hooks
     should have_imeths :plugin_included
+
+    should "know its included detector" do
+      mixin = subject.much_plugin_included_detector
+      assert_instance_of Module, mixin
+      assert_same mixin, subject.much_plugin_included_detector
+      exp = subject::MuchPluginIncludedDetector
+      assert_same exp, subject.much_plugin_included_detector
+    end
 
     should "have no plugin included hooks by default" do
       assert_empty subject.much_plugin_included_hooks
-    end
-
-    should "have no plugin receivers by default" do
-      assert_empty subject.much_plugin_receivers
     end
 
     should "append hooks" do
