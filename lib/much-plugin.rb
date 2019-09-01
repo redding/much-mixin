@@ -1,22 +1,20 @@
 require "much-plugin/version"
 
 module MuchPlugin
-
   def self.included(receiver)
     receiver.class_eval{ extend ClassMethods }
   end
 
   module ClassMethods
-
-    # install an included hook that first checks if this plugin's receiver mixin
+    # install an included block that first checks if this plugin's receiver mixin
     # has already been included.  If it has not been, include the receiver mixin
-    # and run all of the `plugin_included` hooks
+    # and run all of the `plugin_included` blocks
     def included(plugin_receiver)
       return if plugin_receiver.include?(self.much_plugin_included_detector)
       plugin_receiver.send(:include, self.much_plugin_included_detector)
 
-      self.much_plugin_included_hooks.each do |hook|
-        plugin_receiver.class_eval(&hook)
+      self.much_plugin_included_blocks.each do |block|
+        plugin_receiver.class_eval(&block)
       end
     end
 
@@ -31,12 +29,12 @@ module MuchPlugin
       end
     end
 
-    def much_plugin_included_hooks; @much_plugin_included_hooks ||= []; end
-
-    def plugin_included(&hook)
-      self.much_plugin_included_hooks << hook
+    def much_plugin_included_blocks
+      @much_plugin_included_blocks ||= []
     end
 
+    def plugin_included(&block)
+      self.much_plugin_included_blocks << block
+    end
   end
-
 end

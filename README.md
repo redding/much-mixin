@@ -5,20 +5,17 @@ An API to ensure mixin included logic (the "plugin") only runs once.
 ## Usage
 
 ```ruby
-requre 'much-plugin'
+requre "much-plugin"
 
 module MyPluginMixin
   include MuchPlugin
 
   plugin_included do
-
-    # ... do some stuff ...
+    # do some stuff ...
     # - will be class eval'd in the scope of the receiver of `MyPluginMixin`
     # - will only be executed once per receiver, no matter how many times
     #   `MyPluginMixin` is included in that receiver
-
   end
-
 end
 ```
 
