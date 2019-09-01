@@ -16,6 +16,16 @@ module MuchPlugin
       self.much_plugin_included_blocks.each do |block|
         plugin_receiver.class_eval(&block)
       end
+
+      self.much_plugin_class_method_blocks.each do |block|
+        self.much_plugin_class_methods_module.class_eval(&block)
+      end
+      plugin_receiver.send(:extend, self.much_plugin_class_methods_module)
+
+      self.much_plugin_instance_method_blocks.each do |block|
+        self.much_plugin_instance_methods_module.class_eval(&block)
+      end
+      plugin_receiver.send(:include, self.much_plugin_instance_methods_module)
     end
 
     # the included detector is an empty module that is only used to detect if
@@ -29,12 +39,40 @@ module MuchPlugin
       end
     end
 
+    def much_plugin_class_methods_module
+      @much_plugin_class_methods_module ||= Module.new.tap do |m|
+        self.const_set("MuchPluginClassMethods", m)
+      end
+    end
+
+    def much_plugin_instance_methods_module
+      @much_plugin_instance_methods_module ||= Module.new.tap do |m|
+        self.const_set("MuchPluginInstanceMethods", m)
+      end
+    end
+
     def much_plugin_included_blocks
       @much_plugin_included_blocks ||= []
     end
 
+    def much_plugin_class_method_blocks
+      @much_plugin_class_method_blocks ||= []
+    end
+
+    def much_plugin_instance_method_blocks
+      @much_plugin_instance_method_blocks ||= []
+    end
+
     def plugin_included(&block)
       self.much_plugin_included_blocks << block
+    end
+
+    def plugin_class_methods(&block)
+      self.much_plugin_class_method_blocks << block
+    end
+
+    def plugin_instance_methods(&block)
+      self.much_plugin_instance_method_blocks << block
     end
   end
 end
