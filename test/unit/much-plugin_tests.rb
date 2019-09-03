@@ -1,19 +1,18 @@
-require 'assert'
-require 'much-plugin'
+require "assert"
+require "much-plugin"
 
 module MuchPlugin
-
   class UnitTests < Assert::Context
     desc "MuchPlugin"
     setup do
-      @hook1 = proc{ 1 }
-      @hook2 = proc{ 2 }
+      @block1 = proc{ 1 }
+      @block2 = proc{ 2 }
 
       @plugin = Module.new{ include MuchPlugin }
     end
     subject{ @plugin }
 
-    should have_imeths :much_plugin_included_detector, :much_plugin_included_hooks
+    should have_imeths :much_plugin_included_detector, :much_plugin_included_blocks
     should have_imeths :plugin_included
 
     should "know its included detector" do
@@ -24,54 +23,53 @@ module MuchPlugin
       assert_same exp, subject.much_plugin_included_detector
     end
 
-    should "have no plugin included hooks by default" do
-      assert_empty subject.much_plugin_included_hooks
+    should "have no plugin included blocks by default" do
+      assert_empty subject.much_plugin_included_blocks
     end
 
-    should "append hooks" do
-      subject.plugin_included(&@hook1)
-      subject.plugin_included(&@hook2)
+    should "append blocks" do
+      subject.plugin_included(&@block1)
+      subject.plugin_included(&@block2)
 
-      assert_equal @hook1, subject.much_plugin_included_hooks.first
-      assert_equal @hook2, subject.much_plugin_included_hooks.last
+      assert_equal @block1, subject.much_plugin_included_blocks.first
+      assert_equal @block2, subject.much_plugin_included_blocks.last
     end
-
   end
 
   class MixedInTests < UnitTests
     desc "when mixed in"
     setup do
       @receiver = Class.new do
-        def self.inc_hook1;   @hook1_count ||= 0; @hook1_count += 1; end
-        def self.hook1_count; @hook1_count ||= 0; end
-        def self.inc_hook2;   @hook2_count ||= 0; @hook2_count += 1; end
-        def self.hook2_count; @hook2_count ||= 0; end
+        def self.inc_block1;   @block1_count ||= 0; @block1_count += 1; end
+        def self.block1_count; @block1_count ||= 0; end
+        def self.inc_block2;   @block2_count ||= 0; @block2_count += 1; end
+        def self.block2_count; @block2_count ||= 0; end
       end
     end
 
-    should "call the plugin included hooks" do
-      assert_equal 0, @receiver.hook1_count
-      assert_equal 0, @receiver.hook2_count
+    should "call the plugin included blocks" do
+      assert_equal 0, @receiver.block1_count
+      assert_equal 0, @receiver.block2_count
 
       @receiver.send(:include, TestPlugin)
 
-      assert_equal 1, @receiver.hook1_count
-      assert_equal 1, @receiver.hook2_count
+      assert_equal 1, @receiver.block1_count
+      assert_equal 1, @receiver.block2_count
     end
 
-    should "call hooks only once no matter even if previously mixed in" do
+    should "call blocks only once no matter even if previously mixed in" do
       @receiver.send(:include, TestPlugin)
 
-      assert_equal 1, @receiver.hook1_count
-      assert_equal 1, @receiver.hook2_count
+      assert_equal 1, @receiver.block1_count
+      assert_equal 1, @receiver.block2_count
 
       @receiver.send(:include, TestPlugin)
 
-      assert_equal 1, @receiver.hook1_count
-      assert_equal 1, @receiver.hook2_count
+      assert_equal 1, @receiver.block1_count
+      assert_equal 1, @receiver.block2_count
     end
 
-    should "call hooks only once even if mixed in by a 3rd party" do
+    should "call blocks only once even if mixed in by a 3rd party" do
       third_party = Module.new do
         def self.included(receiver)
           receiver.send(:include, TestPlugin)
@@ -79,27 +77,25 @@ module MuchPlugin
       end
       @receiver.send(:include, third_party)
 
-      assert_equal 1, @receiver.hook1_count
-      assert_equal 1, @receiver.hook2_count
+      assert_equal 1, @receiver.block1_count
+      assert_equal 1, @receiver.block2_count
 
       @receiver.send(:include, TestPlugin)
 
-      assert_equal 1, @receiver.hook1_count
-      assert_equal 1, @receiver.hook2_count
+      assert_equal 1, @receiver.block1_count
+      assert_equal 1, @receiver.block2_count
 
       @receiver.send(:include, third_party)
 
-      assert_equal 1, @receiver.hook1_count
-      assert_equal 1, @receiver.hook2_count
+      assert_equal 1, @receiver.block1_count
+      assert_equal 1, @receiver.block2_count
     end
 
     TestPlugin = Module.new do
       include MuchPlugin
 
-      plugin_included{ inc_hook1 }
-      plugin_included{ inc_hook2 }
+      plugin_included{ inc_block1 }
+      plugin_included{ inc_block2 }
     end
-
   end
-
 end
