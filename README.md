@@ -45,6 +45,28 @@ module MyPluginMixin
 end
 ```
 
+### `after_plugin_included`
+
+These hooks work just like the `plugin_included` hooks, except they are evaluated _after_ any plugin class/instance methods have been evaluated. E.g. use this to call a class method that the plugin defines.
+
+```ruby
+requre "much-plugin"
+
+module MyPluginMixin
+  include MuchPlugin
+
+  after_plugin_included do
+    configure_the_plugin
+  end
+
+  plugin_class_methods do
+    def configure_the_plugin
+      # ...
+    end
+  end
+end
+```
+
 ## Example
 
 ```ruby
