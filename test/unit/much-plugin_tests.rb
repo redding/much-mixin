@@ -13,7 +13,7 @@ module MuchPlugin
     subject{ @plugin }
 
     should have_imeths :much_plugin_included_detector, :much_plugin_included_blocks
-    should have_imeths :plugin_included
+    should have_imeths :plugin_included, :after_plugin_included
 
     should "know its included detector" do
       mixin = subject.much_plugin_included_detector
@@ -25,6 +25,7 @@ module MuchPlugin
 
     should "have no plugin included blocks by default" do
       assert_empty subject.much_plugin_included_blocks
+      assert_empty subject.much_plugin_after_included_blocks
     end
 
     should "append blocks" do
@@ -44,17 +45,21 @@ module MuchPlugin
         def self.block1_count; @block1_count ||= 0; end
         def self.inc_block2;   @block2_count ||= 0; @block2_count += 1; end
         def self.block2_count; @block2_count ||= 0; end
+
+        def self.do_something_count; @do_something_count ||= 0; end
       end
     end
 
     should "call the plugin included blocks" do
       assert_equal 0, @receiver.block1_count
       assert_equal 0, @receiver.block2_count
+      assert_equal 0, @receiver.do_something_count
 
       @receiver.send(:include, TestPlugin)
 
       assert_equal 1, @receiver.block1_count
       assert_equal 1, @receiver.block2_count
+      assert_equal 1, @receiver.do_something_count
     end
 
     should "call blocks only once no matter even if previously mixed in" do
@@ -62,11 +67,13 @@ module MuchPlugin
 
       assert_equal 1, @receiver.block1_count
       assert_equal 1, @receiver.block2_count
+      assert_equal 1, @receiver.do_something_count
 
       @receiver.send(:include, TestPlugin)
 
       assert_equal 1, @receiver.block1_count
       assert_equal 1, @receiver.block2_count
+      assert_equal 1, @receiver.do_something_count
     end
 
     should "call blocks only once even if mixed in by a 3rd party" do
@@ -79,23 +86,37 @@ module MuchPlugin
 
       assert_equal 1, @receiver.block1_count
       assert_equal 1, @receiver.block2_count
+      assert_equal 1, @receiver.do_something_count
 
       @receiver.send(:include, TestPlugin)
 
       assert_equal 1, @receiver.block1_count
       assert_equal 1, @receiver.block2_count
+      assert_equal 1, @receiver.do_something_count
 
       @receiver.send(:include, third_party)
 
       assert_equal 1, @receiver.block1_count
       assert_equal 1, @receiver.block2_count
+      assert_equal 1, @receiver.do_something_count
     end
 
-    TestPlugin = Module.new do
-      include MuchPlugin
+    TestPlugin =
+      Module.new do
+        include MuchPlugin
 
-      plugin_included{ inc_block1 }
-      plugin_included{ inc_block2 }
-    end
+        plugin_included{ inc_block1 }
+        after_plugin_included{
+          inc_block2
+          do_something
+        }
+
+        plugin_class_methods do
+          def do_something
+            @do_something_count ||= 0
+            @do_something_count += 1
+          end
+        end
+      end
   end
 end
