@@ -1,5 +1,5 @@
-require 'much-plugin'
-require 'benchmark'
+require "much-plugin"
+require "benchmark"
 
 module Methods; end
 

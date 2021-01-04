@@ -112,7 +112,7 @@ MyClass.a_class_method      # => "a-class-method"
 
 Add this line to your application's Gemfile:
 
-    gem 'much-plugin'
+    gem "much-plugin"
 
 And then execute:
 

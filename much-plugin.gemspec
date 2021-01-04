@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 # -*- encoding: utf-8 -*-
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "much-plugin/version"
 
@@ -11,13 +13,14 @@ Gem::Specification.new do |gem|
   gem.summary     = %q{An API to ensure mixin included logic (the "plugin") only runs once.}
   gem.description = %q{An API to ensure mixin included logic (the "plugin") only runs once.}
   gem.homepage    = "http://github.com/redding/much-plugin"
-  gem.license     = 'MIT'
+  gem.license     = "MIT"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_development_dependency("assert", ["~> 2.18.1"])
+  gem.required_ruby_version = "~> 2.5"
 
+  gem.add_development_dependency("assert", ["~> 2.19.0"])
 end
