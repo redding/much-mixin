@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
 require "assert"
-require "much-plugin"
+require "much-mixin"
 
-module MuchPlugin
+module MuchMixin
   class SystemTests < Assert::Context
-    desc "MuchPlugin"
+    desc "MuchMixin"
     setup do
       @my_class = MyClass.new
     end
     subject{ @my_class }
 
-    should "class eval the plugin included block on MyClass" do
+    should "class eval the mix-in included block on MyClass" do
       assert_equal "another", subject.another
     end
 
-    should "add the plugin class methods to MyClass" do
+    should "add the mix-in class methods to MyClass" do
       assert_equal "a-class-method", MyClass.a_class_method
     end
 
-    should "add the plugin instance methods to MyClass" do
+    should "add the mix-in instance methods to MyClass" do
       assert_equal "an-instance-method", subject.an_instance_method
     end
 
@@ -29,20 +29,20 @@ module MuchPlugin
       end
     end
 
-    module MyPlugin
-      include MuchPlugin
+    module MyMuchMixin
+      include MuchMixin
 
-      plugin_included do
+      mixin_included do
         include AnotherMixin
       end
 
-      plugin_class_methods do
+      mixin_class_methods do
         def a_class_method
           "a-class-method"
         end
       end
 
-      plugin_instance_methods do
+      mixin_instance_methods do
         def an_instance_method
           "an-instance-method"
         end
@@ -50,7 +50,7 @@ module MuchPlugin
     end
 
     class MyClass
-      include MyPlugin
+      include MyMuchMixin
     end
   end
 end

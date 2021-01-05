@@ -1,18 +1,17 @@
 # frozen_string_literal: true
 
-# -*- encoding: utf-8 -*-
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "much-plugin/version"
+require "much-mixin/version"
 
 Gem::Specification.new do |gem|
-  gem.name        = "much-plugin"
-  gem.version     = MuchPlugin::VERSION
+  gem.name        = "much-mixin"
+  gem.version     = MuchMixin::VERSION
   gem.authors     = ["Kelly Redding", "Collin Redding"]
   gem.email       = ["kelly@kellyredding.com", "collin.redding@me.com"]
-  gem.summary     = %q{An API to ensure mixin included logic (the "plugin") only runs once.}
-  gem.description = %q{An API to ensure mixin included logic (the "plugin") only runs once.}
-  gem.homepage    = "http://github.com/redding/much-plugin"
+  gem.summary     = %q{Enhanced mix-in API.}
+  gem.description = %q{Enhanced mix-in API.}
+  gem.homepage    = "http://github.com/redding/much-mixin"
   gem.license     = "MIT"
 
   gem.files         = `git ls-files`.split($/)
@@ -22,5 +21,5 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = "~> 2.5"
 
-  gem.add_development_dependency("assert", ["~> 2.19.0"])
+  gem.add_development_dependency("assert", ["~> 2.19.2"])
 end
