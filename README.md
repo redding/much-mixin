@@ -1,66 +1,66 @@
-# MuchPlugin
+# MuchMixin
 
-An API to ensure mixin included logic (the "plugin") only runs once.
+Enhanced mix-in API.
 
 ## Usage
 
 ```ruby
-requre "much-plugin"
+requre "much-mixin"
 
-module MyPluginMixin
-  include MuchPlugin
+module MyMuchMixin
+  include MuchMixin
 
-  plugin_included do
+  mixin_included do
     # do some stuff ...
-    # - will be class eval'd in the scope of the receiver of `MyPluginMixin`
+    # - will be class eval'd in the scope of the receiver of `MyMuchMixin`
     # - will only be executed once per receiver, no matter how many times
-    #   `MyPluginMixin` is included in that receiver
+    #   `MyMuchMixin` is included in that receiver
   end
 end
 ```
 
-Mix `MuchPlugin` in on other mixins that act as "plugins" to other components.  Define included hooks using `plugin_included` that will be class eval'd in the scope of the receiver.
+Mix `MuchMixin` in on mix-ins. Define included hooks using `mixin_included` that will be class eval'd in the scope of the receiver.
 
-This allows you to define multiple hooks separately and ensures each hook will only be executed once - even if your plugin is mixed in multiple times on the same receiver.
+This allows you to define multiple hooks separately and ensures each hook will only be executed once - even if your mix-in is mixed-in multiple times on the same receiver.
 
-### `plugin_class_methods` / `plugin_instance_methods`
+### `mixin_class_methods` / `mixin_instance_methods`
 
-MuchPlugin provides convenience methods for defining instance/class methods on plugin receivers:
+MuchMixin provides convenience methods for defining instance/class methods on receivers:
 
 ```ruby
-requre "much-plugin"
+requre "much-mixin"
 
-module MyPluginMixin
-  include MuchPlugin
+module MyMuchMixin
+  include MuchMixin
 
-  plugin_class_methods do
+  mixin_class_methods do
     # define some methods ...
     # - these methods will become class methods on the receiver
   end
 
-  plugin_instance_methods do
+  mixin_instance_methods do
     # define some methods ...
     # - these methods will become instance methods on the receiver
   end
 end
 ```
 
-### `after_plugin_included`
+### `after_mixin_included`
 
-These hooks work just like the `plugin_included` hooks, except they are evaluated _after_ any plugin class/instance methods have been evaluated. E.g. use this to call a class method that the plugin defines.
+These hooks work just like the `mixin_included` hooks, except they are evaluated _after_ any mix-in class/instance methods have been evaluated. E.g. use this to call a class method that the mix-in defines.
 
 ```ruby
-requre "much-plugin"
+requre "much-mixin"
 
-module MyPluginMixin
-  include MuchPlugin
+module MyMuchMixin
+  include MuchMixin
 
-  after_plugin_included do
-    configure_the_plugin
+  after_mixin_included do
+    configure_the_mixin
   end
 
-  plugin_class_methods do
-    def configure_the_plugin
+  mixin_class_methods do
+    def configure_the_mixin
       # ...
     end
   end
@@ -70,7 +70,7 @@ end
 ## Example
 
 ```ruby
-requre "much-plugin"
+requre "much-mixin"
 
 module AnotherMixin
   def another
@@ -78,20 +78,20 @@ module AnotherMixin
   end
 end
 
-module MyPlugin
-  include MuchPlugin
+module MyMuchMixin
+  include MuchMixin
 
-  plugin_included do
+  mixin_included do
     include AnotherMixin
   end
 
-  plugin_class_methods do
+  mixin_class_methods do
     def a_class_method
       "a-class-method"
     end
   end
 
-  plugin_instance_methods do
+  mixin_instance_methods do
     def an_instance_method
       "an-instance-method"
     end
@@ -99,7 +99,7 @@ module MyPlugin
 end
 
 class MyClass
-  include MyPlugin
+  include MyMuchMixin
 end
 
 my_class = MyClass.new
@@ -112,7 +112,7 @@ MyClass.a_class_method      # => "a-class-method"
 
 Add this line to your application's Gemfile:
 
-    gem "much-plugin"
+    gem "much-mixin"
 
 And then execute:
 
@@ -120,7 +120,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install much-plugin
+    $ gem install much-mixin
 
 ## Contributing
 

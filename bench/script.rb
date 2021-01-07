@@ -1,4 +1,4 @@
-require "much-plugin"
+require "much-mixin"
 require "benchmark"
 
 module Methods; end
@@ -9,10 +9,10 @@ module MyMixin
   end
 end
 
-module MyPlugin
-  include MuchPlugin
+module MyMuchMixin
+  include MuchMixin
 
-  plugin_included do
+  mixin_included do
     include Methods
   end
 end
@@ -21,7 +21,7 @@ Benchmark.bmbm do |x|
   x.report("MyMixin") do
     10_000.times{ Class.new{ include MyMixin } }
   end
-  x.report("MyPlugin") do
-    10_000.times{ Class.new{ include MyPlugin } }
+  x.report("MyMuchMixin") do
+    10_000.times{ Class.new{ include MyMuchMixin } }
   end
 end
