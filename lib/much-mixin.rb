@@ -12,24 +12,24 @@ module MuchMixin
     # included. If it has not been, include the receiver mixin and run all of
     # the `mixin_included` blocks.
     def included(mixin_receiver)
-      return if mixin_receiver.include?(self.much_mixin_included_detector)
-      mixin_receiver.send(:include, self.much_mixin_included_detector)
+      return if mixin_receiver.include?(much_mixin_included_detector)
+      mixin_receiver.send(:include, much_mixin_included_detector)
 
-      self.much_mixin_included_blocks.each do |block|
+      much_mixin_included_blocks.each do |block|
         mixin_receiver.class_eval(&block)
       end
 
-      self.much_mixin_class_method_blocks.each do |block|
-        self.much_mixin_class_methods_module.class_eval(&block)
+      much_mixin_class_method_blocks.each do |block|
+        much_mixin_class_methods_module.class_eval(&block)
       end
-      mixin_receiver.send(:extend, self.much_mixin_class_methods_module)
+      mixin_receiver.send(:extend, much_mixin_class_methods_module)
 
-      self.much_mixin_instance_method_blocks.each do |block|
-        self.much_mixin_instance_methods_module.class_eval(&block)
+      much_mixin_instance_method_blocks.each do |block|
+        much_mixin_instance_methods_module.class_eval(&block)
       end
-      mixin_receiver.send(:include, self.much_mixin_instance_methods_module)
+      mixin_receiver.send(:include, much_mixin_instance_methods_module)
 
-      self.much_mixin_after_included_blocks.each do |block|
+      much_mixin_after_included_blocks.each do |block|
         mixin_receiver.class_eval(&block)
       end
     end
@@ -41,19 +41,19 @@ module MuchMixin
     # be tracked back to much-mixin.
     def much_mixin_included_detector
       @much_mixin_included_detector ||= Module.new.tap do |m|
-        self.const_set("MuchMixinIncludedDetector", m)
+        const_set("MuchMixinIncludedDetector", m)
       end
     end
 
     def much_mixin_class_methods_module
       @much_mixin_class_methods_module ||= Module.new.tap do |m|
-        self.const_set("MuchMixinClassMethods", m)
+        const_set("MuchMixinClassMethods", m)
       end
     end
 
     def much_mixin_instance_methods_module
       @much_mixin_instance_methods_module ||= Module.new.tap do |m|
-        self.const_set("MuchMixinInstanceMethods", m)
+        const_set("MuchMixinInstanceMethods", m)
       end
     end
 
@@ -74,19 +74,19 @@ module MuchMixin
     end
 
     def mixin_included(&block)
-      self.much_mixin_included_blocks << block
+      much_mixin_included_blocks << block
     end
 
     def after_mixin_included(&block)
-      self.much_mixin_after_included_blocks << block
+      much_mixin_after_included_blocks << block
     end
 
     def mixin_class_methods(&block)
-      self.much_mixin_class_method_blocks << block
+      much_mixin_class_method_blocks << block
     end
 
     def mixin_instance_methods(&block)
-      self.much_mixin_instance_method_blocks << block
+      much_mixin_instance_method_blocks << block
     end
   end
 end
