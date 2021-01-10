@@ -14,7 +14,8 @@ module MuchMixin
     end
     subject{ @muchmixin }
 
-    should have_imeths :much_mixin_included_detector, :much_mixin_included_blocks
+    should have_imeths :much_mixin_included_detector
+    should have_imeths :much_mixin_included_blocks
     should have_imeths :mixin_included, :after_mixin_included
 
     should "know its included detector" do
@@ -43,12 +44,27 @@ module MuchMixin
     desc "when mixed in"
     setup do
       @receiver = Class.new do
-        def self.inc_block1;   @block1_count ||= 0; @block1_count += 1; end
-        def self.block1_count; @block1_count ||= 0; end
-        def self.inc_block2;   @block2_count ||= 0; @block2_count += 1; end
-        def self.block2_count; @block2_count ||= 0; end
+        def self.inc_block1
+          @block1_count ||= 0
+          @block1_count += 1
+        end
 
-        def self.do_something_count; @do_something_count ||= 0; end
+        def self.block1_count
+          @block1_count ||= 0
+        end
+
+        def self.inc_block2
+          @block2_count ||= 0
+          @block2_count += 1
+        end
+
+        def self.block2_count
+          @block2_count ||= 0
+        end
+
+        def self.do_something_count
+          @do_something_count ||= 0
+        end
       end
     end
 
@@ -109,10 +125,10 @@ module MuchMixin
       include MuchMixin
 
       mixin_included{ inc_block1 }
-      after_mixin_included{
+      after_mixin_included do
         inc_block2
         do_something
-      }
+      end
 
       mixin_class_methods do
         def do_something
