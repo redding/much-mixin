@@ -43,29 +43,30 @@ module MuchMixin
   class MixedInTests < UnitTests
     desc "when mixed in"
     setup do
-      @receiver = Class.new do
-        def self.inc_block1
-          @block1_count ||= 0
-          @block1_count += 1
-        end
+      @receiver =
+        Class.new do
+          def self.inc_block1
+            @block1_count ||= 0
+            @block1_count += 1
+          end
 
-        def self.block1_count
-          @block1_count ||= 0
-        end
+          def self.block1_count
+            @block1_count ||= 0
+          end
 
-        def self.inc_block2
-          @block2_count ||= 0
-          @block2_count += 1
-        end
+          def self.inc_block2
+            @block2_count ||= 0
+            @block2_count += 1
+          end
 
-        def self.block2_count
-          @block2_count ||= 0
-        end
+          def self.block2_count
+            @block2_count ||= 0
+          end
 
-        def self.do_something_count
-          @do_something_count ||= 0
+          def self.do_something_count
+            @do_something_count ||= 0
+          end
         end
-      end
     end
 
     should "call the mix-in included blocks" do
@@ -95,11 +96,12 @@ module MuchMixin
     end
 
     should "call blocks only once even if mixed in by a 3rd party" do
-      third_party = Module.new do
-        def self.included(receiver)
-          receiver.send(:include, TestMuchMixin)
+      third_party =
+        Module.new do
+          def self.included(receiver)
+            receiver.send(:include, TestMuchMixin)
+          end
         end
-      end
       @receiver.send(:include, third_party)
 
       assert_equal 1, @receiver.block1_count
