@@ -40,21 +40,24 @@ module MuchMixin
     # seen in the ancestors it doesn't look like some random module and it can
     # be tracked back to much-mixin.
     def much_mixin_included_detector
-      @much_mixin_included_detector ||= Module.new.tap do |m|
-        const_set("MuchMixinIncludedDetector", m)
-      end
+      @much_mixin_included_detector ||=
+        Module.new.tap do |m|
+          const_set("MuchMixinIncludedDetector", m)
+        end
     end
 
     def much_mixin_class_methods_module
-      @much_mixin_class_methods_module ||= Module.new.tap do |m|
-        const_set("MuchMixinClassMethods", m)
-      end
+      @much_mixin_class_methods_module ||=
+        Module.new.tap do |m|
+          const_set("MuchMixinClassMethods", m)
+        end
     end
 
     def much_mixin_instance_methods_module
-      @much_mixin_instance_methods_module ||= Module.new.tap do |m|
-        const_set("MuchMixinInstanceMethods", m)
-      end
+      @much_mixin_instance_methods_module ||=
+        Module.new.tap do |m|
+          const_set("MuchMixinInstanceMethods", m)
+        end
     end
 
     def much_mixin_included_blocks
